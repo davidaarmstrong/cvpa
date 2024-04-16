@@ -113,5 +113,56 @@ gap_analysis <- function(
     select(-c(statistic, parameter, method, alternative))
   counts
 }
-
+#' Make weighted mean of vote intention/choice
+#'
+#' @param data Data from inst/extdata/issue_data_with_weights.RDS.
+#' @param issue Character string giving name of issue variable
+#' @param years Select desired years
+#' @param grouping_vars For which groups do you want separate estimates (region or province, gender, age_cats, degree, religion, language, union_household, community_size)
+#' @param ... Other arguments to be passed down, not implemented
+#' @examples
+#' iss <- readRDS(system.file("extdata/issue_data_with_weight.RDS", package="cvpa"))
+#' wtd_issue(iss, "wageprice_1", grouping_vars="degree")
+#'
+#' @importFrom rlang sym `:=`
+#' @importFrom Hmisc wtd.mean
+#' @export
+#'
+wtd_issue <- function(
+    data,
+    issue,
+    years = 1945:2022,
+    grouping_vars = NULL,
+    ...){
+  avail_grps <- c("age_cats", "religion", "degree", "woman", "province", "region", "language", "union_household", "community_size")
+  if(any(!grouping_vars %in% avail_grps)){
+    nogrp <- setdiff(grouping_vars, avail_grps)
+    stop(paste0("The following grouping variables are not present in the data: ", paste(nogrp, collapse=", "), "\n"))
+  }
+  grouping_vars <- ifelse(grouping_vars == "gender", "woman", grouping_vars)
+  grouping_vars <- ifelse(grouping_vars == "community_size", "com_100", grouping_vars)
+  data <- data %>% select(all_of(c(issue, "year", "weight", grouping_vars))) %>% na.omit()
+  if(nrow(data) == 0){
+    stop("No data available in selected grouping variables.\n")
+  }
+  avail_yrs <- sort(unique(data$year))
+  use_yrs <- intersect(years, avail_yrs)
+  data <- data %>% filter(year %in% use_yrs)
+  if(nrow(data) == 0){
+    stop("No data available in selected years.\n")
+  }
+  message(paste0("Years available for: ", issue, ": ", paste(use_yrs, collapse=", "), "\n"))
+  if("region" %in% grouping_vars & "province" %in% grouping_vars){
+    message("You can only choose one of region or province; region has been selected.\n")
+    grouping_vars <- grouping_vars[-which(grouping_vars == "province")]
+  }
+  grouping_vars <- c("year", grouping_vars)
+  res <- data %>%
+    #    filter(year %in% years & !is.na(vv)) %>%
+    dplyr::select(all_of(c(grouping_vars, issue, "weight"))) %>%
+    na.omit() %>%
+    group_by(across(all_of(grouping_vars))) %>%
+    summarise({{issue}} :=  Hmisc::wtd.mean(!!sym(issue), weights=weight, na.rm=TRUE))
+  return(res)
+}
 
