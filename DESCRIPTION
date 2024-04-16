@@ -10,6 +10,7 @@ Authors@R:
     person("Tyler", "Romualdi", , "tromuald@uwo.ca", role = c("aut")))
 Description: The main focus of the package is to give weighted party support and issue attitudes by demographic groups over time. 
 License: MIT + file LICENSE
+Depends: R (>= 3.5.0)
 Imports: broom, dplyr, stats, tidyr
 Encoding: UTF-8
 LazyData: true
