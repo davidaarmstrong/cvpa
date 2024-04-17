@@ -21,7 +21,7 @@ wtd_issue(data, issue, years = 1945:2022, grouping_vars = NULL, ...)
 Make weighted mean of vote intention/choice
 }
 \examples{
-iss <- readRDS(system.file("extdata/issue_data_with_weight.RDS", package="cvpa"))
-wtd_issue(iss, "wageprice_1", grouping_vars="degree")
+data(issue_data)
+wtd_issue(issue_data, "wageprice_1", grouping_vars="degree")
 
 }

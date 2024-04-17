@@ -30,7 +30,7 @@ gap_analysis(
 Analyze Significance of Voting Gaps
 }
 \examples{
-isd <- readRDS(system.file("extdata/integrated_with_weights.RDS", package = "cvpa"))
-gap_analysis(isd, "intention", years=2000:2022, grouping_var="gender")
+data(vote_data)
+gap_analysis(vote_data, "intention", years=2000:2022, grouping_var="gender")
 
 }

@@ -30,7 +30,7 @@ wtd_vote(
 Make weighted mean of vote intention/choice
 }
 \examples{
-isd <- readRDS(system.file("extdata/integrated_with_weights.RDS", package = "cvpa"))
-wtd_vote(isd, "intention", years=2000:2022)
+data(vote_data)
+wtd_vote(vote_data, "intention", years=2000:2022)
 
 }

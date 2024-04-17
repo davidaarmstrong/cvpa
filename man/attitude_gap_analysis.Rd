@@ -27,7 +27,7 @@ attitude_gap_analysis(
 Analyze Significance of Attitude Gaps
 }
 \examples{
-iss <- readRDS(system.file("extdata/issue_data_with_weight.RDS", package="cvpa"))
-attitude_gap_analysis(iss, "wageprice_1", grouping_var="gender")
+data(issue_data)
+attitude_gap_analysis(issue_data, "wageprice_1", grouping_var="gender")
 
 }

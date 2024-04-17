@@ -2,9 +2,7 @@ utils::globalVariables(c("int", "count", "cnt0", "cnt1", "n0", "n1",
                          "year", "estimate1", "estimate2", "statistic",
                          "parameter", "method", "vote_intention",
                          "vote_choice", "alternative", "weight",
-                         "party_support"))
-
-# int <- readRDS("data/integrated_with_weights.RDS")
+                         "party_support", "val", "type", "vote"))
 
 #' Make weighted mean of vote intention/choice
 #'
@@ -15,8 +13,8 @@ utils::globalVariables(c("int", "count", "cnt0", "cnt1", "n0", "n1",
 #' @param grouping_vars For which groups do you want separate estimates (region or province, gender, age_cats, degree, religion, language, union_household, community_size)
 #' @param ... Other arguments to be passed down, not implemented
 #' @examples
-#' isd <- readRDS(system.file("extdata/integrated_with_weights.RDS", package = "cvpa"))
-#' wtd_vote(isd, "intention", years=2000:2022)
+#' data(vote_data)
+#' wtd_vote(vote_data, "intention", years=2000:2022)
 #'
 #' @importFrom dplyr `%>%` filter select mutate summarise group_by all_of rowwise across contains
 #' @importFrom stats na.omit prop.test
@@ -31,24 +29,28 @@ wtd_vote <- function(
   ...){
   v <- match.arg(vote_type)
   avail_grps <- c("age_cats", "religion", "degree", "woman", "province", "region", "language", "union_household", "community_size")
-  if(!incl_undecided & v == "intention")data <- data %>% filter(vote_intention != "Undecided")
-  vv <- ifelse(v == "intention", "vote_intention", "vote_choice")
+  grouping_vars <- ifelse(grouping_vars == "gender", "woman", grouping_vars)
+  grouping_vars <- ifelse(grouping_vars == "community_size", "com_100", grouping_vars)
+  data <- data %>% filter(type == {{v}} & !is.na(vote))
+  if(!incl_undecided)data <- data %>% filter(vote != "Undecided")
   avail_yrs <- sort(unique(data$year))
   if(any(!years %in% avail_yrs)){
     yrs_out <- setdiff(years, avail_yrs)
     years <- intersect(years, avail_yrs)
     message(paste0("The following years are not available: ", paste(yrs_out, collapse=", ")))
   }
+  if(any(!grouping_vars %in% avail_grps)){
+    nogrp <- setdiff(grouping_vars, avail_grps)
+    stop(paste0("The following grouping variables are not present in the data: ", paste(nogrp, collapse=", "), "\n"))
+  }
   if("region" %in% grouping_vars & "province" %in% grouping_vars){
     message("You can only choose one of region or province; region has been selected.\n")
     grouping_vars <- grouping_vars[-which(grouping_vars == "province")]
   }
-  grouping_vars <- ifelse(grouping_vars == "gender", "woman", grouping_vars)
-  grouping_vars <- ifelse(grouping_vars == "community_size", "com_100", grouping_vars)
   gv2 <- c("year", grouping_vars)
-  grouping_vars <- c("year", vv, grouping_vars)
+  grouping_vars <- c("year", "vote", grouping_vars)
   res <- data %>%
-    filter(year %in% years & !is.na(vv)) %>%
+    filter(year %in% years) %>%
     dplyr::select(all_of(c(grouping_vars, "weight"))) %>%
     na.omit() %>%
     group_by(across(all_of(grouping_vars))) %>%
@@ -67,8 +69,8 @@ return(res)
 #' @param grouping_var For which group do you want separate estimates (gender, degree, union_household, community_size)
 #' @param ... Other arguments to be passed down, not implemented
 #' @examples
-#' isd <- readRDS(system.file("extdata/integrated_with_weights.RDS", package = "cvpa"))
-#' gap_analysis(isd, "intention", years=2000:2022, grouping_var="gender")
+#' data(vote_data)
+#' gap_analysis(vote_data, "intention", years=2000:2022, grouping_var="gender")
 #'
 #' @importFrom tidyr pivot_wider unnest
 #' @importFrom broom tidy
@@ -121,8 +123,8 @@ gap_analysis <- function(
 #' @param grouping_vars For which groups do you want separate estimates (region or province, gender, age_cats, degree, religion, language, union_household, community_size)
 #' @param ... Other arguments to be passed down, not implemented
 #' @examples
-#' iss <- readRDS(system.file("extdata/issue_data_with_weight.RDS", package="cvpa"))
-#' wtd_issue(iss, "wageprice_1", grouping_vars="degree")
+#' data(issue_data)
+#' wtd_issue(issue_data, "wageprice_1", grouping_vars="degree")
 #'
 #' @importFrom rlang sym `:=`
 #' @importFrom Hmisc wtd.mean
@@ -141,7 +143,9 @@ wtd_issue <- function(
   }
   grouping_vars <- ifelse(grouping_vars == "gender", "woman", grouping_vars)
   grouping_vars <- ifelse(grouping_vars == "community_size", "com_100", grouping_vars)
-  data <- data %>% select(all_of(c(issue, "year", "weight", grouping_vars))) %>% na.omit()
+  data <- data %>% select(all_of(c("issue", "val", "year", "weight", grouping_vars))) %>% 
+    filter(issue == {{issue}}) %>% 
+    na.omit()
   if(nrow(data) == 0){
     stop("No data available in selected grouping variables.\n")
   }
@@ -158,10 +162,10 @@ wtd_issue <- function(
   }
   grouping_vars <- c("year", grouping_vars)
   res <- data %>%
-    dplyr::select(all_of(c(grouping_vars, issue, "weight"))) %>%
+    dplyr::select(all_of(c(grouping_vars, "issue", "val", "weight"))) %>%
     na.omit() %>%
     group_by(across(all_of(grouping_vars))) %>%
-    summarise({{issue}} :=  Hmisc::wtd.mean(!!sym(issue), weights=weight, na.rm=TRUE))
+    summarise({{issue}} :=  Hmisc::wtd.mean(val, weights=weight, na.rm=TRUE))
   return(res)
 }
 
@@ -173,8 +177,8 @@ wtd_issue <- function(
 #' @param grouping_var For which group do you want separate estimates (gender, degree, union_household, community_size)
 #' @param ... Other arguments to be passed down, not implemented
 #' @examples
-#' iss <- readRDS(system.file("extdata/issue_data_with_weight.RDS", package="cvpa"))
-#' attitude_gap_analysis(iss, "wageprice_1", grouping_var="gender")
+#' data(issue_data)
+#' attitude_gap_analysis(issue_data, "wageprice_1", grouping_var="gender")
 #'
 #' @importFrom tidyr pivot_wider unnest
 #' @importFrom dplyr bind_rows
@@ -189,7 +193,7 @@ attitude_gap_analysis <- function(
   gv <- match.arg(grouping_var)
   gv <- ifelse(gv == "gender", "woman", gv)
   gv <- ifelse(gv == "community_size", "com_100", gv)
-  data <- data %>% select(all_of(c(gv, issue, "year", "weight"))) %>% na.omit()
+  data <- data %>% select(all_of(c(gv, "issue", "val", "year", "weight"))) %>% na.omit()
   if(nrow(data) == 0)stop("No data available for groups.\n")
   avail_yrs <- sort(unique(data$year))
   use_yrs <- intersect(years, avail_yrs)
@@ -198,7 +202,7 @@ attitude_gap_analysis <- function(
     stop("No data available in selected years.\n")
   }
   # do weighted anova
-  form <- reformulate(gv, response=issue)
+  form <- reformulate(gv, response="val")
   sp <- split(data, data$year)
   aovs <- lapply(sp, \(x)aov(form, x, weights=weight))
   aovs <- lapply(aovs, sum_aov)
@@ -212,8 +216,9 @@ attitude_gap_analysis <- function(
 #' @param x An object of class `aov`. 
 #' @param ... Other arguments to be passed down, currently not implemented. 
 #' @examples
-#' data(mtcars)
-#' a <- aov(qsec ~ vs, data=mtcars)
+#' data(issue_data)
+#' a <- aov(val ~ union_household, 
+#'          data=subset(issue_data, issue=="wageprice_1"))
 #' sum_aov(a)
 #' 
 #' @importFrom dplyr tibble
@@ -228,3 +233,5 @@ sum_aov <- function(x, ...){
          pval = summary(x)[[1]][1,5])
   
 }
+
+

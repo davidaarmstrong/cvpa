@@ -16,8 +16,9 @@ Summarise an anova object as a weighted difference
 of means test
 }
 \examples{
-data(mtcars)
-a <- aov(qsec ~ vs, data=mtcars)
+data(issue_data)
+a <- aov(val ~ union_household, 
+         data=subset(issue_data, issue=="wageprice_1"))
 sum_aov(a)
 
 }
