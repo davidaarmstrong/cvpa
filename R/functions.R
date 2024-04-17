@@ -158,7 +158,6 @@ wtd_issue <- function(
   }
   grouping_vars <- c("year", grouping_vars)
   res <- data %>%
-    #    filter(year %in% years & !is.na(vv)) %>%
     dplyr::select(all_of(c(grouping_vars, issue, "weight"))) %>%
     na.omit() %>%
     group_by(across(all_of(grouping_vars))) %>%
@@ -166,3 +165,66 @@ wtd_issue <- function(
   return(res)
 }
 
+#' Analyze Significance of Attitude Gaps
+#'
+#' @param data Data from inst/extdata/issue_data_with_weights.RDS.
+#' @param issue Character string giving the issue to be used.
+#' @param years Select desired years
+#' @param grouping_var For which group do you want separate estimates (gender, degree, union_household, community_size)
+#' @param ... Other arguments to be passed down, not implemented
+#' @examples
+#' iss <- readRDS(system.file("extdata/issue_data_with_weight.RDS", package="cvpa"))
+#' attitude_gap_analysis(iss, "wageprice_1", grouping_var="gender")
+#'
+#' @importFrom tidyr pivot_wider unnest
+#' @importFrom dplyr bind_rows
+#' @importFrom stats aov reformulate
+#' @export
+attitude_gap_analysis <- function(
+    data,
+    issue,
+    years = 1945:2022,
+    grouping_var = c("gender", "degree", "union_household", "community_size"),
+    ...){
+  gv <- match.arg(grouping_var)
+  gv <- ifelse(gv == "gender", "woman", gv)
+  gv <- ifelse(gv == "community_size", "com_100", gv)
+  data <- data %>% select(all_of(c(gv, issue, "year", "weight"))) %>% na.omit()
+  if(nrow(data) == 0)stop("No data available for groups.\n")
+  avail_yrs <- sort(unique(data$year))
+  use_yrs <- intersect(years, avail_yrs)
+  data <- data %>% filter(year %in% use_yrs)
+  if(nrow(data) == 0){
+    stop("No data available in selected years.\n")
+  }
+  # do weighted anova
+  form <- reformulate(gv, response=issue)
+  sp <- split(data, data$year)
+  aovs <- lapply(sp, \(x)aov(form, x, weights=weight))
+  aovs <- lapply(aovs, sum_aov)
+  bind_rows(aovs, .id="year")
+}
+
+#' Summarise aov object
+#' 
+#' Summarise an anova object as a weighted difference
+#' of means test
+#' @param x An object of class `aov`. 
+#' @param ... Other arguments to be passed down, currently not implemented. 
+#' @examples
+#' data(mtcars)
+#' a <- aov(qsec ~ vs, data=mtcars)
+#' sum_aov(a)
+#' 
+#' @importFrom dplyr tibble
+#' @importFrom stats confint coef summary.aov
+#' @export
+sum_aov <- function(x, ...){
+  tibble(est_0 = coef(x)[1], 
+         est_1 = sum(coef(x)), 
+         diff = coef(x)[2], 
+         conf.low = confint(x)[2,1], 
+         conf.high = confint(x)[2,2],
+         pval = summary(x)[[1]][1,5])
+  
+}
