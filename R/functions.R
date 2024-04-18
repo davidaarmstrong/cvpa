@@ -29,6 +29,10 @@ wtd_vote <- function(
   ...){
   v <- match.arg(vote_type)
   avail_grps <- c("age_cats", "religion", "degree", "woman", "province", "region", "language", "union_household", "community_size")
+  if(any(!grouping_vars %in% avail_grps)){
+    nogrp <- setdiff(grouping_vars, avail_grps)
+    stop(paste0("The following grouping variables are not present in the data: ", paste(nogrp, collapse=", "), "\n"))
+  }
   grouping_vars <- ifelse(grouping_vars == "gender", "woman", grouping_vars)
   grouping_vars <- ifelse(grouping_vars == "community_size", "com_100", grouping_vars)
   data <- data %>% filter(type == {{v}} & !is.na(vote))
@@ -231,7 +235,6 @@ sum_aov <- function(x, ...){
          conf.low = confint(x)[2,1], 
          conf.high = confint(x)[2,2],
          pval = summary(x)[[1]][1,5])
-  
 }
 
 
