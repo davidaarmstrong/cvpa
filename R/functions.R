@@ -86,13 +86,6 @@ gap_analysis <- function(
     years = 1945:2022,
     grouping_var = c("gender", "degree", "union_household", "community_size"),
     ...){
-  make_flag <- function(x, n){
-    p <- sum(x)/sum(n)
-    o <- outer(n, p, "*")
-    flag <- any(o < 5)
-    ifelse(flag, "p-val unreliable", "p-val reliable")
-
-  }
   v <- match.arg(vote_type)
   gv <- match.arg(grouping_var)
   gv <- ifelse(gv == "gender", "woman", gv)
@@ -237,4 +230,17 @@ sum_aov <- function(x, ...){
          pval = summary(x)[[1]][1,5])
 }
 
+#' Make Reliability Flag for Weighted Proportions Test
+#' 
+#' Makes a flag to identify if the p-value for the difference
+#' of proportions test is reliable (all expected counts greater than 5). 
+#' @param x A vector of two values of category counts. 
+#' @param n A vector of two values of sample sizes
+#' @export
+make_flag <- function(x, n){
+  p <- sum(x)/sum(n)
+  o <- outer(n, p, "*")
+  flag <- any(o < 5)
+  ifelse(flag, "p-val unreliable", "p-val reliable")
+}
 

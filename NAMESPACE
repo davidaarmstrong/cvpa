@@ -2,6 +2,7 @@
 
 export(attitude_gap_analysis)
 export(gap_analysis)
+export(make_flag)
 export(sum_aov)
 export(wtd_issue)
 export(wtd_vote)
