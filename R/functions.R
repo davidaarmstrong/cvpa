@@ -28,7 +28,7 @@ wtd_vote <- function(
   grouping_vars = NULL,
   ...){
   v <- match.arg(vote_type)
-  avail_grps <- c("age_cats", "religion", "degree", "woman", "province", "region", "language", "union_household", "community_size")
+  avail_grps <- c("age_cats", "religion", "degree", "woman", "gender", "province", "region", "language", "union_household", "community_size", "com_100")
   grouping_vars <- ifelse(grouping_vars == "gender", "woman", grouping_vars)
   grouping_vars <- ifelse(grouping_vars == "community_size", "com_100", grouping_vars)
   if(any(!grouping_vars %in% avail_grps)){
