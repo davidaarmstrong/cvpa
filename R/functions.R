@@ -29,12 +29,12 @@ wtd_vote <- function(
   ...){
   v <- match.arg(vote_type)
   avail_grps <- c("age_cats", "religion", "degree", "woman", "province", "region", "language", "union_household", "community_size")
+  grouping_vars <- ifelse(grouping_vars == "gender", "woman", grouping_vars)
+  grouping_vars <- ifelse(grouping_vars == "community_size", "com_100", grouping_vars)
   if(any(!grouping_vars %in% avail_grps)){
     nogrp <- setdiff(grouping_vars, avail_grps)
     stop(paste0("The following grouping variables are not present in the data: ", paste(nogrp, collapse=", "), "\n"))
   }
-  grouping_vars <- ifelse(grouping_vars == "gender", "woman", grouping_vars)
-  grouping_vars <- ifelse(grouping_vars == "community_size", "com_100", grouping_vars)
   data <- data %>% filter(type == {{v}} & !is.na(vote))
   if(!incl_undecided)data <- data %>% filter(vote != "Undecided")
   avail_yrs <- sort(unique(data$year))
@@ -42,10 +42,6 @@ wtd_vote <- function(
     yrs_out <- setdiff(years, avail_yrs)
     years <- intersect(years, avail_yrs)
     message(paste0("The following years are not available: ", paste(yrs_out, collapse=", ")))
-  }
-  if(any(!grouping_vars %in% avail_grps)){
-    nogrp <- setdiff(grouping_vars, avail_grps)
-    stop(paste0("The following grouping variables are not present in the data: ", paste(nogrp, collapse=", "), "\n"))
   }
   if("region" %in% grouping_vars & "province" %in% grouping_vars){
     message("You can only choose one of region or province; region has been selected.\n")
