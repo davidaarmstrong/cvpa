@@ -1,7 +1,7 @@
 Package: cvpa
 Type: Package
 Title: Canadian Voting and Policy Attitudes
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: 
     c(person("Dave", "Armstrong", , email="davearmstrong.ps@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-9358-2489")),
@@ -13,4 +13,4 @@ License: MIT + file LICENSE
 Depends: R (>= 3.5.0)
 Imports: broom, dplyr, Hmisc, rlang, stats, tidyr
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1

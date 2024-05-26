@@ -15,8 +15,8 @@
 #'   \item{province}{Province of residence: 10 = Newfoundland and Labrador, 11 = PEI, 12 = Nova Scotia, 13 = New Brunswick, 
 #'   24 = Quebec, 35 = Ontario, 46 = Manitoba, 47 = Saskatchewan, 48 = Alberta, 59 = BC, 
 #'   60 = Yukon, 61 = Northwest Territories, 62 = Nunavut}
-#'   \item{com_100}{Community size >= 100,000 (0/1)}
-#'   \item{woman}{Respondent gender 1 = female, 0 = male}
+#'   \item{community_size}{Community size >= 100,000 (0/1)}
+#'   \item{gender}{Respondent gender 1 = female, 0 = male}
 #'   \item{age_cats}{Age categories: 1 = 17-29, 2 = 30-49, 3 = 50+}
 #'   \item{religion}{Add religion description}
 #'   \item{degree}{Respondent has a university degree (0/1)}
@@ -52,8 +52,8 @@ NULL
 #'   \item{province}{Province of residence: 10 = Newfoundland and Labrador, 11 = PEI, 12 = Nova Scotia, 13 = New Brunswick, 
 #'   24 = Quebec, 35 = Ontario, 46 = Manitoba, 47 = Saskatchewan, 48 = Alberta, 59 = BC, 
 #'   60 = Yukon, 61 = Northwest Territories, 62 = Nunavut}
-#'   \item{com_100}{Community size >= 100,000 (0/1)}
-#'   \item{woman}{Respondent gender 1 = female, 0 = male}
+#'   \item{community_size}{Community size >= 100,000 (0/1)}
+#'   \item{gender}{Respondent gender 1 = female, 0 = male}
 #'   \item{age_cats}{Age categories: 1 = 17-29, 2 = 30-49, 3 = 50+}
 #'   \item{age}{Age of respondent, where available}
 #'   \item{religion}{Add religion description}

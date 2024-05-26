@@ -28,9 +28,7 @@ wtd_vote <- function(
   grouping_vars = NULL,
   ...){
   v <- match.arg(vote_type)
-  avail_grps <- c("age_cats", "religion", "degree", "woman", "gender", "province", "region", "language", "union_household", "community_size", "com_100")
-  grouping_vars <- ifelse(grouping_vars == "gender", "woman", grouping_vars)
-  grouping_vars <- ifelse(grouping_vars == "community_size", "com_100", grouping_vars)
+  avail_grps <- c("age_cats", "religion", "degree", "gender", "province", "region", "language", "union_household", "community_size")
   if(any(!grouping_vars %in% avail_grps)){
     nogrp <- setdiff(grouping_vars, avail_grps)
     stop(paste0("The following grouping variables are not present in the data: ", paste(nogrp, collapse=", "), "\n"))
@@ -84,8 +82,6 @@ gap_analysis <- function(
     ...){
   v <- match.arg(vote_type)
   gv <- match.arg(grouping_var)
-  gv <- ifelse(gv == "gender", "woman", gv)
-  gv <- ifelse(gv == "community_size", "com_100", gv)
   res <- wtd_vote(data,
                   years = years,
                   inc_undecided = incl_undecided,
@@ -184,8 +180,6 @@ attitude_gap_analysis <- function(
     grouping_var = c("gender", "degree", "union_household", "community_size"),
     ...){
   gv <- match.arg(grouping_var)
-  gv <- ifelse(gv == "gender", "woman", gv)
-  gv <- ifelse(gv == "community_size", "com_100", gv)
   data <- data %>% select(all_of(c(gv, "issue", "val", "year", "weight"))) %>% na.omit()
   if(nrow(data) == 0)stop("No data available for groups.\n")
   avail_yrs <- sort(unique(data$year))

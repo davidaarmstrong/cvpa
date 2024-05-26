@@ -1,0 +1,4 @@
+^LICENSE\.md$
+^cvpa\.Rproj
+^.*\.Rproj$
+^\.Rproj\.user$
