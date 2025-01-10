@@ -11,6 +11,6 @@ Authors@R:
 Description: The main focus of the package is to give weighted party support and issue attitudes by demographic groups over time. 
 License: MIT + file LICENSE
 Depends: R (>= 3.5.0)
-Imports: broom, dplyr, Hmisc, rlang, stats, tidyr
+Imports: broom, dplyr, rio, rlang, stats, tidyr
 Encoding: UTF-8
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2

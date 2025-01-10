@@ -9,7 +9,9 @@ gap_analysis(
   vote_type = c("intention", "choice"),
   incl_undecided = FALSE,
   years = 1945:2022,
-  grouping_var = c("gender", "degree", "union_household", "community_size"),
+  grouping_var = c("age_cats", "religion", "degree", "gender", "province", "region",
+    "language", "union_household", "community_size", "occupation"),
+  levels = NULL,
   ...
 )
 }
@@ -24,10 +26,15 @@ gap_analysis(
 
 \item{grouping_var}{For which group do you want separate estimates (gender, degree, union_household, community_size)}
 
+\item{levels}{Character vector of length 2 giving values of `grouping_var` to use for comparison.  `NULL` is valid if `grouping_var` only has two valid values.  Otherwise, values must be specified.}
+
 \item{...}{Other arguments to be passed down, not implemented}
 }
 \description{
-Analyze Significance of Voting Gaps
+The function does a difference of proportions test for the
+two identified groups for each of the parties.  Note, for gender, 
+there are not many surveys with non-binary/other response options
+so those are removed from consideration here.
 }
 \examples{
 data(vote_data)

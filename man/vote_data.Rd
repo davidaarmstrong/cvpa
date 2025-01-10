@@ -21,6 +21,7 @@ A data frame with 78,614 rows and 11 variables
   \item{degree}{Respondent has a university degree (0/1)}
   \item{union_household}{Whether respondent is in a household with a union member (0/1)}
   \item{language}{Add language description}
+  \item{occupation}{Occupation: 1=Managers, Executives, Business Owners, 2=Professional, 3=Routine Non-Manual, 4=Working Class, 5=Armed Forces, 6=Farmer/Fisherman, 7=Retired, 8=Unemployed, 9=Student, 99=Other (incl. housewife, homemaker)}
   \item{weight}{Sum of weights for \code{region}-\code{langauge} profile}
 }
 }

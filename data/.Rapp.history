@@ -1,0 +1,39 @@
+load("/Users/david/cvpa/data/vote_data.rda")
+ls()
+head(vote_data)
+dim(vote_data)
+table(vote_data$year)
+length(table(vote_data$year))
+load("/Users/david/cvpa/data/issue_data.rda")
+head(issue_data)
+dim(issue_data)
+library(rio_)
+library(rio)
+tmp <- import("~/Downloads/SearchReport_ApplicantTracking_IR2024-2.xlsx")
+head(tmp)
+tmp[,1]
+nms <- tmp[2:150, 1]
+nms
+already_in <- import("~/Dropbox/appointments/ir_search_spreadsheet.xlsx")
+already_in[,1]
+ain <- already_in[2:52, 1]
+ain
+setdiff(nms, ain)
+tmp[,1] %in% setdiff(nms, ain)
+tmp[tmp[,1] %in% setdiff(nms, ain), ]
+rio::export(tmp[tmp[,1] %in% setdiff(nms, ain), ], file="~/Dropbox/appointments/extra.xlsx"
+)
+appts  <- import("~/Dropbox/appointments/ir_search_spreadsheet.xlsx", skip=1)
+head(appts)
+new <- import("~/Downloads/SearchReport_ApplicantTracking_IR2024-3.xlsx", skip=1)
+head(new)
+setdiff(new$name, appts$name)
+setdiff(appts$Name, new$Name)
+setdiff(new$Name, appts$Name)
+t(t(setdiff(new$Name, appts$Name)))
+newnames <- setdiff(new$Name, appts$Name)
+new <- new %>% filter(Name %in% newnames)
+library(dplyr)
+new <- new %>% filter(Name %in% newnames)
+new
+rio::export(new, file="~/Dropbox/appointments/new.csv")
