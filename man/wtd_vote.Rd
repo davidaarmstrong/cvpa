@@ -8,7 +8,7 @@ wtd_vote(
   data,
   vote_type = c("intention", "choice"),
   incl_undecided = FALSE,
-  years = 1945:2022,
+  years = 1945:2023,
   grouping_vars = NULL,
   ...
 )

@@ -26,7 +26,7 @@ wtd_vote <- function(
     data,
   vote_type = c("intention", "choice"),
   incl_undecided = FALSE,
-  years = 1945:2022,
+  years = 1945:2023,
   grouping_vars = NULL,
   ...){
   v <- match.arg(vote_type)
