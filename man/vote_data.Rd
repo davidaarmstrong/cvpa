@@ -32,6 +32,6 @@ Data on vote choice and intention from several surveys. The data are in long for
 Fill in some details
 }
 \references{
-One, Some 2024. "Describing the Data".
+Lucas, Jack, Tyler Romualdi, David A. Armstrong II and Elizabeth Goodyear-Grant. "Demographic Divides in Canadian Voting, 1945-2023: The Canadian Vote Intention Dataset", Canadian Journal of Political Science, Forthcoming.
 }
 \keyword{datasets}
