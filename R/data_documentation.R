@@ -11,19 +11,17 @@
 #'   \item{vote}{Factor indicating vote choice or intention depending on \code{type}}
 #'   \item{type}{String indicating vote whever \code{vote} is intention or actual choice}
 #'   \item{year}{Year of survey}
-#'   \item{region}{Region of residence: 1 = Atlantic, 2 = Quebec, 3 = Ontario, 4 = Prairies, 5 = BC, 6 = The North}
-#'   \item{province}{Province of residence: 10 = Newfoundland and Labrador, 11 = PEI, 12 = Nova Scotia, 13 = New Brunswick, 
-#'   24 = Quebec, 35 = Ontario, 46 = Manitoba, 47 = Saskatchewan, 48 = Alberta, 59 = BC, 
-#'   60 = Yukon, 61 = Northwest Territories, 62 = Nunavut}
-#'   \item{community_size}{Community size >= 100,000 (0/1)}
-#'   \item{gender}{Respondent gender 0 = male, 1 = female.  Non-binary category begins in 2019 and is available in the full data on the \href{https://www.queensu.ca/cora/}{Canadian Opinion Research Archive}.}
-#'   \item{age_cats}{Age categories: 1 = 18-29, 2 = 30-49, 3 = 50+}
-#'   \item{religion}{Add religion description}
-#'   \item{degree}{Respondent has a university degree (0/1)}
-#'   \item{union_household}{Whether respondent is in a household with a union member (0/1)}
-#'   \item{language}{Add language description}
-#'   \item{occupation}{Occupation: 1=Managers, Executives, Business Owners, 2=Professional, 3=Routine Non-Manual, 4=Working Class, 5=Armed Forces, 6=Farmer/Fisherman, 7=Retired, 8=Unemployed, 9=Student, 99=Other (incl. housewife, homemaker)}
-#'   \item{weight}{Sum of weights for \code{region}-\code{langauge} profile}
+#'   \item{region}{Factor indicating region of residence: Atlantic, Quebec, Ontario, Prairies, BC, The North}
+#'   \item{province}{Factor indicating province of residence: Newfoundland and Labrador, PEI, Nova Scotia, New Brunswick, Quebec, Ontario, Manitoba, Saskatchewan, Alberta, BC, Yukon, Northwest Territories, Nunavut}
+#'   \item{community_size}{Factor identifying community size of respondent's residence: < 100,000, >= 100,000}
+#'   \item{gender}{Factor identifying respondent gender Man, Woman.  Non-binary category begins in 2019 and is available in the full data on the \href{https://www.queensu.ca/cora/}{Canadian Opinion Research Archive}.}
+#'   \item{age_cats}{Factor identifying respondent's age category: 18-29, 30-49, 50+}
+#'   \item{religion}{Factor giving respondent's religious affiliation: Catholic, Protestant, Jewish, Other, None}
+#'   \item{degree}{Factor indicating respondent's level of education: No Degree, University Degree}
+#'   \item{union_household}{Factor identifying union membership: Non-union Household, Union Household}
+#'   \item{language}{Language spoken by respondent - English, French, English + French, Other}
+#'   \item{occupation}{Respondent's Occupation: Managers/Executives/Business Owners, Professional, Routine Non-Manual, Working Class, Armed Forces, Farmer/Fisherman, Retired, Unemployed, Student, Other (incl. housewife, homemaker)}
+#'   \item{weight}{Sum of weights for demographic profile}
 #'}
 #'
 #' @references
