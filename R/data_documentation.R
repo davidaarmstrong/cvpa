@@ -16,7 +16,7 @@
 #'   24 = Quebec, 35 = Ontario, 46 = Manitoba, 47 = Saskatchewan, 48 = Alberta, 59 = BC, 
 #'   60 = Yukon, 61 = Northwest Territories, 62 = Nunavut}
 #'   \item{community_size}{Community size >= 100,000 (0/1)}
-#'   \item{gender}{Respondent gender 0 = male, 1 = female, 2 = non-binary.  Non-binary category begins in 2019.}
+#'   \item{gender}{Respondent gender 0 = male, 1 = female.  Non-binary category begins in 2019 and is available in the full data on the \href{https://www.queensu.ca/cora/}{Canadian Opinion Research Archive}.}
 #'   \item{age_cats}{Age categories: 1 = 18-29, 2 = 30-49, 3 = 50+}
 #'   \item{religion}{Add religion description}
 #'   \item{degree}{Respondent has a university degree (0/1)}
