@@ -12,5 +12,7 @@ Description: The main focus of the package is to give weighted party support and
 License: MIT + file LICENSE
 Depends: R (>= 3.5.0)
 Imports: broom, dplyr, nanoparquet, rio, rlang, stats, tidyr
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr
 Encoding: UTF-8
 RoxygenNote: 7.3.2

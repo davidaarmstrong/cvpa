@@ -1,0 +1,210 @@
+---
+title: "Getting started with cvpa"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with cvpa}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+cvpa gives you weighted party support and policy-issue attitudes by
+demographic group, over time, from Canadian public-opinion surveys going
+back to 1945. As of version 0.2.0, that covers several hundred policy
+questions across seven issue domains -- economy and taxation, energy and
+environment, health/education/social programs, immigration/diversity/
+federalism, foreign policy and identity, social issues/rights/justice, and
+democracy and institutions -- in addition to vote choice and intention.
+From cvpa's point of view, vote is just one more question: it's decoded and
+analyzed the same way as any policy question.
+
+## Two ways to use cvpa
+
+There are two separate paths through the package, and it's worth being
+clear about which one you're on:
+
+* **The live data path** (`update_cvpa_data()`, `question_catalog()`,
+  `question_data()`, `wtd_response()`, `response_gap_analysis()`) reads
+  Parquet files hosted alongside the [cp3 web
+  app](https://www.quantoid.ca/files/app-js-remote/), covering every
+  question in the catalog. This is almost certainly what you want for new
+  analysis.
+* **The legacy vote path** (`vote_data`, `wtd_vote()`, `gap_analysis()`)
+  is the original vote-choice/intention dataset and functions the package
+  shipped with before 0.2.0, kept as-is for reproducing prior work (in
+  particular Lucas, Romualdi, Armstrong, and Goodyear-Grant's *Canadian
+  Journal of Political Science* piece on the Canadian Vote Intention
+  Dataset). `wtd_vote()`/`gap_analysis()` are, under the hood, thin
+  wrappers around the same general engine that powers the live data path,
+  so their behavior hasn't changed -- see the last section of this
+  vignette.
+
+This vignette focuses on the live data path, since that's what's new.
+
+```{r setup}
+library(cvpa)
+```
+
+## Setting up the local cache
+
+cvpa doesn't bundle policy-attitude data in the package itself -- there's
+too much of it, and it's updated periodically as new survey waves are
+added. Instead, `update_cvpa_data()` downloads what you ask for into a
+local cache (see `cvpa_cache_dir()`) the first time you need it, and every
+other function reads only from that cache. Nothing in the package other
+than `update_cvpa_data()` ever touches the network, so you're always in
+control of when a download happens.
+
+The question catalog and the demographic/party code-labels table are small
+and are always refreshed by `update_cvpa_data()`. Respondent-level data for
+a specific question is only fetched when you name it (or ask for
+`questions = "all"`, which is on the order of 90MB across ~630 questions,
+as of this writing):
+
+```{r update-data}
+update_cvpa_data(questions = "bri_econ_013")
+```
+
+*(The code chunks below assume this succeeded. If you're reading this
+vignette somewhere without network access, the code is shown for reference
+but its output won't appear.)*
+
+```{r have-data, include = FALSE}
+have_data <- requireNamespace("nanoparquet", quietly = TRUE) &&
+  tryCatch({
+    update_cvpa_data(questions = "bri_econ_013", quiet = TRUE)
+    TRUE
+  }, error = function(e) FALSE)
+knitr::opts_chunk$set(eval = have_data)
+```
+
+## Finding a question
+
+`question_catalog()` lists every available question, one row per question,
+deduplicated across the several hundred survey waves each question has
+accumulated over the decades:
+
+```{r catalog}
+question_catalog(domain = "econ")
+```
+
+`domain` and `type` (`"b"` for binary questions, `"lsm"` for 3-point
+less/same/more-style questions, `"nsa"` for 3-point never/sometimes/always-
+style questions, or `"party"` for vote choice/intention) both filter the
+catalog if you want to narrow it down. With no arguments, `question_catalog()`
+returns everything, vote included:
+
+```{r catalog-all}
+nrow(question_catalog())
+table(question_catalog()$domain)
+```
+
+Once you've picked a question, `question_response_labels()` shows you what
+its response categories actually are and how they're coded:
+
+```{r response-labels}
+question_response_labels("bri_econ_013")
+```
+
+## Fetching and inspecting a question's data
+
+`question_data()` reads the (now cached) respondent-level data for one
+question and, by default, decodes both the response and every demographic
+column into labeled factors:
+
+```{r question-data}
+d <- question_data("bri_econ_013")
+head(d)
+```
+
+Every question's data has the same shape: `response`, `weight`, `year`,
+plus the demographic and vote columns listed in `cvpa_grouping_vars` --
+see `demographic_vars` for what each demographic variable measures and
+what categories it takes:
+
+```{r grouping-vars}
+cvpa_grouping_vars
+demographic_vars
+```
+
+Notice that `vote_intention` and `vote_choice` are in that list alongside
+the demographics -- every question's data carries how each respondent
+voted, so you can group any policy question by vote just as easily as by
+gender or region.
+
+## Weighted response shares over time
+
+`wtd_response()` computes each response category's weighted share of the
+total, for every year (and, optionally, grouping-variable combination):
+
+```{r wtd-response}
+wtd_response(d, grouping_vars = "gender")
+```
+
+A quick look at how the "More" category (support for reducing the
+rich-poor gap) has moved over time, by gender:
+
+```{r plot-wtd-response, fig.width = 6, fig.height = 4}
+more_by_year <- subset(wtd_response(d, grouping_vars = "gender"), response == "More")
+# reshape() matches explicitly on year rather than assuming the two
+# genders' rows line up positionally -- safer if you adapt this to a
+# question/grouping variable that doesn't have every level in every year.
+wide <- reshape(as.data.frame(more_by_year[c("year", "gender", "response_share")]),
+                 idvar = "year", timevar = "gender", direction = "wide")
+matplot(
+  wide$year, wide[, -1],
+  type = "l", lty = 1, lwd = 2, col = c("steelblue", "firebrick"),
+  xlab = "Year", ylab = "Share answering \"More\"",
+  main = "Support for reducing the rich-poor gap, by gender"
+)
+legend("bottomright", legend = c("Man", "Woman"), col = c("steelblue", "firebrick"), lty = 1, lwd = 2, bty = "n")
+```
+
+## Testing whether a gap is significant
+
+`response_gap_analysis()` generalizes `gap_analysis()` to any question: a
+difference-of-proportions test between two levels of a grouping variable,
+for each response category, for each year:
+
+```{r response-gap-analysis}
+response_gap_analysis(d, grouping_var = "gender")
+```
+
+The `flag` column tells you whether every cell going into that year's test
+had an expected count above 5 (`"p-val reliable"`) or not
+(`"p-val unreliable"`) -- see `make_flag()`.
+
+## Vote is just another question
+
+Because vote choice and intention live in the same catalog and the same
+`resp/question=<code>/data_0.parquet` layout as every policy question,
+everything above works identically for `"vote_choice"`/`"vote_intention"`:
+
+```{r vote-as-question}
+update_cvpa_data(questions = "vote_choice")
+vc <- question_data("vote_choice", years = 2000:2021)
+wtd_response(vc, grouping_vars = "gender")
+```
+
+## The legacy vote path
+
+If you're working with the original `vote_data` dataset -- for instance to
+reproduce results from the CJPS piece it was built for -- `wtd_vote()` and
+`gap_analysis()` are unchanged:
+
+```{r legacy}
+data(vote_data)
+wtd_vote(vote_data, "intention", years = 2000:2022, grouping_vars = "gender")
+gap_analysis(vote_data, "intention", years = 2000:2022, grouping_var = "gender")
+```
+
+Note that `vote_data` predates the cp3 Parquet pipeline and has a single
+`community_size` column rather than the live data path's `com_100`/`com_500`
+split -- see `demographic_vars` for the live path's version of each
+demographic variable.
