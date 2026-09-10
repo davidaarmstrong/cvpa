@@ -7,18 +7,18 @@
 question_response_labels(question)
 }
 \arguments{
-\item{question}{A question code, e.g. \code{"bri_econ_013"} or \code{"vote_choice"}.}
+\item{question}{A question code, e.g. `"bri_econ_013"` or `"vote_choice"`.}
 }
 \value{
-A data frame with \code{code}, \code{label}, and \code{sort_order}, ordered by
-\code{sort_order}.
+A data frame with `code`, `label`, and `sort_order`, ordered by
+  `sort_order`.
 }
 \description{
-A decoded, one-row-per-category view of what \code{\link{question_catalog}}
-reports as a single comma-separated \code{value_labels} string (or, for
-\code{vote_choice}/\code{vote_intention}, of the relevant rows of
-\code{code_labels.parquet}) -- the same table \code{\link{question_data}} uses
-internally to turn a question's raw \code{response} codes into a labeled
+A decoded, one-row-per-category view of what [question_catalog()]
+reports as a single comma-separated `value_labels` string (or, for
+`vote_choice`/`vote_intention`, of the relevant rows of
+`code_labels.parquet`) -- the same table [question_data()] uses
+internally to turn a question's raw `response` codes into a labeled
 factor.
 }
 \examples{

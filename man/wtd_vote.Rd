@@ -31,9 +31,9 @@ Make weighted mean of vote intention/choice
 }
 \details{
 Since 0.2.0, this is a thin wrapper around the general
-\code{\link{wtd_response}} engine that also powers policy-question analysis (see
-\code{\link{question_data}}) -- its inputs, outputs, and validation behavior are
-unchanged from earlier versions.
+  [wtd_response()] engine that also powers policy-question analysis (see
+  [question_data()]) -- its inputs, outputs, and validation behavior are
+  unchanged from earlier versions.
 }
 \examples{
 data(vote_data)

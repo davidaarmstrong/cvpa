@@ -37,3 +37,4 @@ library(dplyr)
 new <- new %>% filter(Name %in% newnames)
 new
 rio::export(new, file="~/Dropbox/appointments/new.csv")
+load("/Users/david/cvpa/data/vote_data.rda")

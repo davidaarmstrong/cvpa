@@ -82,6 +82,7 @@ have_data <- requireNamespace("nanoparquet", quietly = TRUE) &&
     TRUE
   }, error = function(e) FALSE)
 knitr::opts_chunk$set(eval = have_data)
+have_ggplot2 <- requireNamespace("ggplot2", quietly = TRUE)
 ```
 
 ## Finding a question
@@ -150,20 +151,19 @@ wtd_response(d, grouping_vars = "gender")
 A quick look at how the "More" category (support for reducing the
 rich-poor gap) has moved over time, by gender:
 
-```{r plot-wtd-response, fig.width = 6, fig.height = 4}
+```{r plot-wtd-response, fig.width = 6, fig.height = 4, eval = have_data && have_ggplot2}
+library(ggplot2)
 more_by_year <- subset(wtd_response(d, grouping_vars = "gender"), response == "More")
-# reshape() matches explicitly on year rather than assuming the two
-# genders' rows line up positionally -- safer if you adapt this to a
-# question/grouping variable that doesn't have every level in every year.
-wide <- reshape(as.data.frame(more_by_year[c("year", "gender", "response_share")]),
-                 idvar = "year", timevar = "gender", direction = "wide")
-matplot(
-  wide$year, wide[, -1],
-  type = "l", lty = 1, lwd = 2, col = c("steelblue", "firebrick"),
-  xlab = "Year", ylab = "Share answering \"More\"",
-  main = "Support for reducing the rich-poor gap, by gender"
-)
-legend("bottomright", legend = c("Man", "Woman"), col = c("steelblue", "firebrick"), lty = 1, lwd = 2, bty = "n")
+ggplot(more_by_year, aes(x = year, y = response_share, color = gender)) +
+  geom_line() +
+  geom_point() +
+  scale_color_manual(values = c(Man = "steelblue", Woman = "firebrick")) +
+  labs(
+    x = "Year", y = "Share answering \"More\"",
+    title = "Support for reducing the rich-poor gap, by gender",
+    color = NULL
+  ) +
+  theme_minimal()
 ```
 
 ## Testing whether a gap is significant

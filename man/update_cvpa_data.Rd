@@ -8,32 +8,32 @@ update_cvpa_data(questions = NULL, force = FALSE, quiet = FALSE)
 }
 \arguments{
 \item{questions}{Which questions' respondent-level data to fetch, in
-addition to the catalog: \code{NULL} (default) fetches none, \code{"all"}
+addition to the catalog: `NULL` (default) fetches none, `"all"`
 fetches every question in the catalog (~630 files, roughly 90MB as of
 this writing), or a character vector of specific question codes (see
-\code{\link{question_catalog}}).}
+[question_catalog()]).}
 
-\item{force}{If \code{FALSE} (default), question files already in the cache
-are left alone. If \code{TRUE}, every requested file is re-downloaded.}
+\item{force}{If `FALSE` (default), question files already in the cache
+are left alone. If `TRUE`, every requested file is re-downloaded.}
 
 \item{quiet}{Suppress progress messages.}
 }
 \value{
-Invisibly, \code{TRUE}.
+Invisibly, `TRUE`.
 }
 \description{
 cvpa reads policy-attitude and vote data from Parquet files hosted
 alongside the cp3 web app, not from data bundled in the package. Call
 this first (and again whenever you want the latest data) before using
-\code{\link{question_catalog}}, \code{\link{question_data}}, \code{\link{wtd_response}}, or
-\code{\link{response_gap_analysis}}.
+[question_catalog()], [question_data()], [wtd_response()], or
+[response_gap_analysis()].
 }
 \details{
-The question catalog (\code{vbl_data.parquet}) and the demographic/party
-value-label table (\code{code_labels.parquet}) are small and are always
+The question catalog (`vbl_data.parquet`) and the demographic/party
+value-label table (`code_labels.parquet`) are small and are always
 refreshed. Per-question respondent-level data
-(\code{resp/question=<code>/data_0.parquet}) is only fetched for the
-questions you name in \code{questions} -- there are several hundred of these
+(`resp/question=<code>/data_0.parquet`) is only fetched for the
+questions you name in `questions` -- there are several hundred of these
 across all domains, so nothing downloads them until you ask.
 }
 \examples{

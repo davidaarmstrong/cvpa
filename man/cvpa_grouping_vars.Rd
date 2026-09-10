@@ -3,22 +3,19 @@
 \name{cvpa_grouping_vars}
 \alias{cvpa_grouping_vars}
 \title{Grouping variables available for any question}
-\format{
-An object of class \code{character} of length 13.
-}
 \usage{
 cvpa_grouping_vars
 }
 \description{
-Every table returned by \code{\link{question_data}} carries these columns in
-addition to \code{response}, \code{weight}, and \code{year} -- eleven demographic
-variables (see \code{\link{demographic_vars}} for what each one measures) plus
-\code{vote_intention} and \code{vote_choice}, which travel with every question's
+Every table returned by [question_data()] carries these columns in
+addition to `response`, `weight`, and `year` -- eleven demographic
+variables (see [demographic_vars] for what each one measures) plus
+`vote_intention` and `vote_choice`, which travel with every question's
 data and can be used as grouping variables just like a demographic (this
 is what lets you, say, break a policy question down by how people voted).
-Used to validate the \code{grouping_vars}/\code{grouping_var} argument in
-\code{\link{wtd_response}} and \code{\link{response_gap_analysis}}.
+Used to validate the `grouping_vars`/`grouping_var` argument in
+[wtd_response()] and [response_gap_analysis()].
 }
 \seealso{
-\code{\link{demographic_vars}}, \code{\link{question_data}}
+[demographic_vars], [question_data()]
 }

@@ -8,28 +8,28 @@ question_catalog(domain = NULL, type = NULL)
 }
 \arguments{
 \item{domain}{Optional character vector of domain codes to restrict to
-(see the \code{domain} column of this function's own output for valid
-values, e.g. \code{"econ"}, \code{"soim"}, \code{"vote"}).}
+(see the `domain` column of this function's own output for valid
+values, e.g. `"econ"`, `"soim"`, `"vote"`).}
 
 \item{type}{Optional character vector of question types to restrict to:
-\code{"b"} (binary), \code{"lsm"} (3-point less/same/more-style), \code{"nsa"}
-(3-point never/sometimes/always-style), or \code{"party"} (vote_choice,
+`"b"` (binary), `"lsm"` (3-point less/same/more-style), `"nsa"`
+(3-point never/sometimes/always-style), or `"party"` (vote_choice,
 vote_intention).}
 }
 \value{
-A data frame with one row per question: \code{question}, \code{domain},
-\code{domain_label}, \code{issue_label}, \code{question_wording}, \code{value_labels}
-(comma-separated, ascending -- see \code{\link{question_response_labels}} for a
-decoded, one-row-per-category version), \code{type}, and \code{n_waves} (how
-many survey waves asked this question).
+A data frame with one row per question: `question`, `domain`,
+  `domain_label`, `issue_label`, `question_wording`, `value_labels`
+  (comma-separated, ascending -- see [question_response_labels()] for a
+  decoded, one-row-per-category version), `type`, and `n_waves` (how
+  many survey waves asked this question).
 }
 \description{
 One row per question, deduplicated across the several hundred
 survey-wave rows each question has in the underlying catalog (see
-\code{\link{update_cvpa_data}}). Covers every domain in the cp3 project, including
-\code{"vote"} (\code{vote_choice}/\code{vote_intention}) -- from cvpa's point of view
+[update_cvpa_data()]). Covers every domain in the cp3 project, including
+`"vote"` (`vote_choice`/`vote_intention`) -- from cvpa's point of view
 vote is just one more question, decoded and analyzed the same way as any
-policy question (see \code{\link{question_data}}, \code{\link{wtd_response}}).
+policy question (see [question_data()], [wtd_response()]).
 }
 \examples{
 \dontrun{

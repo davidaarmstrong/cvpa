@@ -14,37 +14,37 @@ response_gap_analysis(
 )
 }
 \arguments{
-\item{data}{A data frame as returned by \code{\link{question_data}}.}
+\item{data}{A data frame as returned by [question_data()].}
 
 \item{grouping_var}{Which grouping variable to compare two levels of;
-must be one of \code{\link{cvpa_grouping_vars}} (or \code{avail_grps}, if you pass a
+must be one of [cvpa_grouping_vars] (or `avail_grps`, if you pass a
 narrower/different list).}
 
-\item{years}{Select desired years. \code{NULL} (default) uses every year in
-\code{data}.}
+\item{years}{Select desired years. `NULL` (default) uses every year in
+`data`.}
 
 \item{levels}{Character vector of length 2 giving values of
-\code{grouping_var} to use for comparison. \code{NULL} is valid if
-\code{grouping_var} only has two valid values in \code{data}; otherwise values
+`grouping_var` to use for comparison. `NULL` is valid if
+`grouping_var` only has two valid values in `data`; otherwise values
 must be specified.}
 
 \item{avail_grps}{Grouping variables considered valid; defaults to
-\code{\link{cvpa_grouping_vars}}.}
+[cvpa_grouping_vars].}
 
-\item{response_var}{Name of the column in \code{data} holding the response
-category; defaults to \code{"response"}.}
+\item{response_var}{Name of the column in `data` holding the response
+category; defaults to `"response"`.}
 }
 \value{
 A data frame with one row per (year, response category):
-the two groups' counts and sample sizes (suffixed with each group's
-label), a reliability \code{flag} (see \code{\link{make_flag}}), the two estimated
-proportions, a p-value, a confidence interval for the difference, and
-\code{diff}.
+  the two groups' counts and sample sizes (suffixed with each group's
+  label), a reliability `flag` (see [make_flag()]), the two estimated
+  proportions, a p-value, a confidence interval for the difference, and
+  `diff`.
 }
 \description{
-Generalizes \code{\link{gap_analysis}} to any question's data (see
-\code{\link{question_data}}), not just vote choice/intention: a difference of
-proportions test between two levels of \code{grouping_var}, for each response
+Generalizes [gap_analysis()] to any question's data (see
+[question_data()]), not just vote choice/intention: a difference of
+proportions test between two levels of `grouping_var`, for each response
 category, for each year.
 }
 \examples{

@@ -13,38 +13,38 @@ wtd_response(
 )
 }
 \arguments{
-\item{data}{A data frame as returned by \code{\link{question_data}} (or any data
-frame with the same shape: \code{response_var}, \code{weight}, \code{year}, plus
-whichever of \code{avail_grps} you want to group by).}
+\item{data}{A data frame as returned by [question_data()] (or any data
+frame with the same shape: `response_var`, `weight`, `year`, plus
+whichever of `avail_grps` you want to group by).}
 
-\item{years}{Select desired years. \code{NULL} (default) uses every year in
-\code{data}.}
+\item{years}{Select desired years. `NULL` (default) uses every year in
+`data`.}
 
 \item{grouping_vars}{For which groups do you want separate estimates;
-must be a subset of \code{avail_grps}.}
+must be a subset of `avail_grps`.}
 
 \item{avail_grps}{Grouping variables considered valid; defaults to
-\code{\link{cvpa_grouping_vars}}.}
+[cvpa_grouping_vars].}
 
-\item{response_var}{Name of the column in \code{data} holding the response
-category. Defaults to \code{"response"}, the column \code{\link{question_data}}
+\item{response_var}{Name of the column in `data` holding the response
+category. Defaults to `"response"`, the column [question_data()]
 produces.}
 }
 \value{
-A data frame with \code{year}, \code{grouping_vars}, the response
-category (named \code{response_var}), \code{count} (summed weight), and
-\code{response_share} (that category's share of the year/group total).
+A data frame with `year`, `grouping_vars`, the response
+  category (named `response_var`), `count` (summed weight), and
+  `response_share` (that category's share of the year/group total).
 }
 \description{
-The general engine behind \code{\link{wtd_vote}}: given a data frame with a
-\code{response} column (any set of categories -- vote choice, a policy
-question's answer categories, whatever \code{response_var} points at),
-\code{weight}, \code{year}, and zero or more grouping columns, compute each
+The general engine behind [wtd_vote()]: given a data frame with a
+`response` column (any set of categories -- vote choice, a policy
+question's answer categories, whatever `response_var` points at),
+`weight`, `year`, and zero or more grouping columns, compute each
 response category's weighted share of the total for every
-year/grouping-variable combination. \code{\link{question_data}} produces data in
-exactly this shape (its \code{response} column decoded to a factor by
+year/grouping-variable combination. [question_data()] produces data in
+exactly this shape (its `response` column decoded to a factor by
 question type), so this works identically for a policy question or for
-vote choice/intention -- see \code{\link{response_gap_analysis}} for the
+vote choice/intention -- see [response_gap_analysis()] for the
 significance-test analog.
 }
 \examples{

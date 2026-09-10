@@ -37,8 +37,8 @@ there are not many surveys with non-binary/other response options
 so those are removed from consideration here.
 }
 \details{
-See \code{\link{response_gap_analysis}} for the same test generalized to
-any policy question, not just vote choice/intention.
+See [response_gap_analysis()] for the same test generalized to
+  any policy question, not just vote choice/intention.
 }
 \examples{
 data(vote_data)

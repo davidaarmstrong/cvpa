@@ -10,8 +10,8 @@ cvpa_cache_dir()
 The cache directory path (created if it doesn't exist yet).
 }
 \description{
-Where \code{\link{update_cvpa_data}} stores downloaded Parquet files and every
+Where [update_cvpa_data()] stores downloaded Parquet files and every
 other cvpa function reads them from. Defaults to a per-user cache
-directory managed by R (see \code{\link[tools:R_user_dir]{tools::R_user_dir()}}); override with
-\code{options(cvpa.cache_dir = ...)}.
+directory managed by R (see [tools::R_user_dir()]); override with
+`options(cvpa.cache_dir = ...)`.
 }
