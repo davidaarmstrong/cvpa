@@ -1,16 +1,16 @@
 Package: cvpa
 Type: Package
 Title: Canadian Voting and Policy Attitudes
-Version: 0.1.1
-Authors@R: 
+Version: 0.2.0
+Authors@R:
     c(person("Dave", "Armstrong", , email="davearmstrong.ps@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-9358-2489")),
     person("Jack", "Lucas", , "jack.lucas@ucalgary.ca", role = c("aut"),
-           comment = c(ORCID = "0000-0002-3498-7267")), 
+           comment = c(ORCID = "0000-0002-3498-7267")),
     person("Tyler", "Romualdi", , "tromuald@uwo.ca", role = c("aut")))
-Description: The main focus of the package is to give weighted party support and issue attitudes by demographic groups over time. 
+Description: The main focus of the package is to give weighted party support and issue attitudes by demographic groups over time. As of 0.2.0, policy-issue and vote data are read on demand from the cp3 project's hosted Parquet files (see update_cvpa_data()) rather than bundled with the package, covering several hundred policy questions across seven issue domains in addition to vote choice/intention.
 License: MIT + file LICENSE
 Depends: R (>= 3.5.0)
-Imports: broom, dplyr, rio, rlang, stats, tidyr
+Imports: broom, dplyr, nanoparquet, rio, rlang, stats, tidyr
 Encoding: UTF-8
 RoxygenNote: 7.3.2

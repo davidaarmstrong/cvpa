@@ -29,6 +29,12 @@ wtd_vote(
 \description{
 Make weighted mean of vote intention/choice
 }
+\details{
+Since 0.2.0, this is a thin wrapper around the general
+\code{\link{wtd_response}} engine that also powers policy-question analysis (see
+\code{\link{question_data}}) -- its inputs, outputs, and validation behavior are
+unchanged from earlier versions.
+}
 \examples{
 data(vote_data)
 wtd_vote(vote_data, "intention", years=2000:2022)
