@@ -2,3 +2,4 @@
 ^cvpa\.Rproj
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^vignettes/.*\.orig$
