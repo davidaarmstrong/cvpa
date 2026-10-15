@@ -213,3 +213,7 @@ question_data <- function(question, years = NULL, decode = TRUE) {
   if (decode) df <- .cvpa_decode_question(df, question)
   df
 }
+
+# Catalog columns referenced inside dplyr verbs in question_catalog(); declared
+# so R CMD check doesn't report them as undefined global variables.
+utils::globalVariables(c("question", "n", "domain_label", "issue_label", "question_wording"))

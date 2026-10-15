@@ -108,7 +108,7 @@ wtd_response <- function(data, years = NULL, grouping_vars = NULL,
 #' @importFrom dplyr `%>%` filter select mutate summarise group_by all_of rowwise across contains rename
 #' @importFrom stats na.omit prop.test setNames
 #' @importFrom rio factorize
-#' @importFrom rlang sym
+#' @importFrom rlang sym :=
 #' @export
 #'
 wtd_vote <- function(
