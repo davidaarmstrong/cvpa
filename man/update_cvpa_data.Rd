@@ -8,10 +8,11 @@ update_cvpa_data(questions = NULL, force = FALSE, quiet = FALSE)
 }
 \arguments{
 \item{questions}{Which questions' respondent-level data to fetch, in
-addition to the catalog: `NULL` (default) fetches none, `"all"`
-fetches every question in the catalog (~630 files, roughly 90MB as of
-this writing), or a character vector of specific question codes (see
-[question_catalog()]).}
+addition to the catalog: `NULL` (default) fetches none, or a character
+vector of specific question codes (see [question_catalog()]). There is
+deliberately no "fetch everything" option -- if you want the full
+dataset, download `dataset.parquet` from
+<https://github.com/lucasjacklucas/cvpa_dataset> instead.}
 
 \item{force}{If `FALSE` (default), question files already in the cache
 are left alone. If `TRUE`, every requested file is re-downloaded.}
@@ -19,7 +20,8 @@ are left alone. If `TRUE`, every requested file is re-downloaded.}
 \item{quiet}{Suppress progress messages.}
 }
 \value{
-Invisibly, `TRUE`.
+Invisibly, `TRUE`, with an attribute `"skipped"` holding the
+  question codes (if any) that could not be downloaded.
 }
 \description{
 cvpa reads policy-attitude and vote data from Parquet files hosted
@@ -35,12 +37,21 @@ refreshed. Per-question respondent-level data
 (`resp/question=<code>/data_0.parquet`) is only fetched for the
 questions you name in `questions` -- there are several hundred of these
 across all domains, so nothing downloads them until you ask.
+
+Downloads are written to a temporary file and checked to be
+  valid Parquet before they replace anything in the cache, so a failed or
+  interrupted download never leaves a corrupt file behind or overwrites a
+  good one. If the catalog or the code labels can't be downloaded, this
+  stops with an error (and your existing cached copies are untouched). If
+  an individual *question* file can't be downloaded -- e.g. a question
+  that is listed in the catalog but has no respondent-level data
+  available -- it is skipped with a warning naming the question(s), and
+  the rest are still fetched.
 }
 \examples{
 \dontrun{
 update_cvpa_data()                                  # just the catalog
 update_cvpa_data(questions = "bri_econ_013")         # + one question
 update_cvpa_data(questions = c("vote_choice", "vote_intention"))
-update_cvpa_data(questions = "all")                  # everything
 }
 }

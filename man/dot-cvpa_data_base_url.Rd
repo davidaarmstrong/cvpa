@@ -8,7 +8,7 @@
 }
 \description{
 Override with `options(cvpa.data_url = ...)` to point the package at a
-different mirror (e.g. a local copy of cp3/parquet_out/ during
-development).
+different mirror (e.g. a local copy of the cvpa_dataset repo's
+`site/static/cp3_parquet/` during development).
 }
 \keyword{internal}

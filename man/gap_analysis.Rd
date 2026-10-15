@@ -8,7 +8,7 @@ gap_analysis(
   data,
   vote_type = c("intention", "choice"),
   incl_undecided = FALSE,
-  years = 1945:2022,
+  years = NULL,
   grouping_var = c("age_cats", "religion", "degree", "gender", "province", "region",
     "language", "union_household", "community_size", "occupation"),
   levels = NULL,
@@ -22,7 +22,8 @@ gap_analysis(
 
 \item{incl_undecided}{If using vote intention, should undecided voters be included?}
 
-\item{years}{Select desired years}
+\item{years}{Select desired years. `NULL` (default) uses every year in
+`data` -- so newly added years are never silently dropped.}
 
 \item{grouping_var}{For which group do you want separate estimates (gender, degree, union_household, community_size)}
 

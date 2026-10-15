@@ -31,8 +31,8 @@ clear about which one you're on:
 
 * **The live data path** (`update_cvpa_data()`, `question_catalog()`,
   `question_data()`, `wtd_response()`, `response_gap_analysis()`) reads
-  Parquet files hosted alongside the [cp3 web
-  app](https://www.quantoid.ca/files/app-js-remote/), covering every
+  Parquet files hosted alongside the [policy-attitudes web
+  app](https://policyattitudes.ca/app/), covering every
   question in the catalog. This is almost certainly what you want for new
   analysis.
 * **The legacy vote path** (`vote_data`, `wtd_vote()`, `gap_analysis()`)
@@ -63,9 +63,10 @@ control of when a download happens.
 
 The question catalog and the demographic/party code-labels table are small
 and are always refreshed by `update_cvpa_data()`. Respondent-level data for
-a specific question is only fetched when you name it (or ask for
-`questions = "all"`, which is on the order of 90MB across ~630 questions,
-as of this writing):
+a specific question is only fetched when you name it (there are several
+hundred questions, so there's deliberately no "fetch everything" option --
+the full dataset is available as `dataset.parquet` from the
+[cvpa_dataset repository](https://github.com/lucasjacklucas/cvpa_dataset)):
 
 ```{r update-data}
 update_cvpa_data(questions = "bri_econ_013")

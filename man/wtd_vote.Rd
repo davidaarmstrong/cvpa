@@ -8,7 +8,7 @@ wtd_vote(
   data,
   vote_type = c("intention", "choice"),
   incl_undecided = FALSE,
-  years = 1945:2023,
+  years = NULL,
   grouping_vars = NULL,
   ...
 )
@@ -20,7 +20,8 @@ wtd_vote(
 
 \item{incl_undecided}{If using vote intention, should undecided voters be included?}
 
-\item{years}{Select desired years}
+\item{years}{Select desired years. `NULL` (default) uses every year in
+`data` -- so newly added years are never silently dropped.}
 
 \item{grouping_vars}{For which groups do you want separate estimates (region or province, gender, age_cats, degree, religion, language, union_household, community_size)}
 

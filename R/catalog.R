@@ -24,7 +24,7 @@ cvpa_grouping_vars <- c(
 )
 
 # Raw `response` codes for each non-party question type, ascending -- mirrors
-# TYPE_CONFIG in cp3/app-js-remote/app.js exactly. Both this package and the
+# TYPE_CONFIG in the cvpa_dataset repo's site/static/app/app.js exactly. Both this package and the
 # JS app decode the same vbl_data.value_labels string against these codes,
 # positionally, in ascending order; keep the two in sync if that convention
 # ever changes.

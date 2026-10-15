@@ -93,7 +93,8 @@ wtd_response <- function(data, years = NULL, grouping_vars = NULL,
 #' @param data Data from inst/extdata/integrated_with_weights.RDS.
 #' @param vote_type Use vote intention or choice
 #' @param incl_undecided If using vote intention, should undecided voters be included?
-#' @param years Select desired years
+#' @param years Select desired years. `NULL` (default) uses every year in
+#'   `data` -- so newly added years are never silently dropped.
 #' @param grouping_vars For which groups do you want separate estimates (region or province, gender, age_cats, degree, religion, language, union_household, community_size)
 #' @param ... Other arguments to be passed down, not implemented
 #' @details Since 0.2.0, this is a thin wrapper around the general
@@ -114,7 +115,7 @@ wtd_vote <- function(
     data,
   vote_type = c("intention", "choice"),
   incl_undecided = FALSE,
-  years = 1945:2023,
+  years = NULL,
   grouping_vars = NULL,
   ...){
   v <- match.arg(vote_type)
@@ -173,7 +174,8 @@ wtd_vote <- function(
 #' @param data Data from inst/extdata/integrated_with_weights.RDS.
 #' @param vote_type Use vote intention or choice
 #' @param incl_undecided If using vote intention, should undecided voters be included?
-#' @param years Select desired years
+#' @param years Select desired years. `NULL` (default) uses every year in
+#'   `data` -- so newly added years are never silently dropped.
 #' @param grouping_var For which group do you want separate estimates (gender, degree, union_household, community_size)
 #' @param levels Character vector of length 2 giving values of `grouping_var` to use for comparison.  `NULL` is valid if `grouping_var` only has two valid values.  Otherwise, values must be specified.
 #' @param ... Other arguments to be passed down, not implemented
@@ -191,7 +193,7 @@ gap_analysis <- function(
     data,
     vote_type = c("intention", "choice"),
     incl_undecided = FALSE,
-    years = 1945:2022,
+    years = NULL,
     grouping_var = c("age_cats", "religion", "degree", "gender", "province", "region", "language", "union_household", "community_size", "occupation"),
     levels = NULL,
     ...){
